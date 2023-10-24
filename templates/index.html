@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Filter Example</title>
+</head>
+<body>
+    <h1>나만의 감성 엽서 제작</h1>
+    
+    <div>
+        <button id="OriginalFilterBtn">Original Filter</button>
+        <button id="cannyFilterBtn">Canny Filter</button>
+        <button id="sobelFilterBtn">Sobel Filter</button>
+        <button id="MergeFilterBtn">Merge Filter</button>
+        <button id="sobelLineFilterBtn">Sobel Edge Line Filter</button>
+        <button id ="saveFileBtn">Save File</button>
+        <!-- 이미지를 보여줄 <img> 요소 -->
+        <img id="filteredImage" src="{{ image_url }}" alt="Filtered Image">
+    </div>
+    
+    <script>
+        // 필터 적용 버튼 클릭 시 이벤트 핸들러
+        function applyFilter(filterType) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/filter/" + filterType, true);
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    var blob = this.response;
+                    var imgElement = document.getElementById("filteredImage");
+                    var imageUrl = URL.createObjectURL(blob);
+                    imgElement.src = imageUrl;
+                }
+            };
+            xhr.send();
+        }
+        document.getElementById("OriginalFilterBtn").addEventListener("click", function() {
+            applyFilter("nomal");
+        });
+
+        document.getElementById("cannyFilterBtn").addEventListener("click", function() {
+            applyFilter("canny");
+        });
+
+        document.getElementById("sobelFilterBtn").addEventListener("click", function() {
+            applyFilter("sobel");
+        });
+
+        document.getElementById("MergeFilterBtn").addEventListener("click", function() {
+            applyFilter("random");
+        });
+
+        document.getElementById("sobelLineFilterBtn").addEventListener("click", function() {
+            applyFilter("sobel_line");
+        });
+        document.getElementById("saveFileBtn").addEventListener("click", function() {
+            applyFilter("save_file");
+        });
+    </script>
+</body>
+</html>
